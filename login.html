@@ -32,9 +32,13 @@
         }
         .left-panel {
             background: white;
-            width: 524px;
+            width: 500px;
             position: relative;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .right-panel {
             flex: 1;
@@ -47,42 +51,43 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding: 60px;
+            padding: 40px;
+        }
+        .left-content {
+            width: 100%;
+            max-width: 250px;
+            text-align: center;
         }
         .brand-title {
             font-family: 'Felipa', cursive;
-            font-size: 60px;
+            font-size: 38px;
             color: #000;
             text-align: center;
-            margin-top: 185px;
-            margin-bottom: 60px;
+            margin-bottom: 30px;
         }
         .welcome-text {
             font-family: 'Poppins', sans-serif;
             font-weight: 300;
-            font-size: 20px;
+            font-size: 16px;
             color: #000;
             text-align: center;
-            margin-bottom: 65px;
+            margin-bottom: 35px;
         }
         .form-container {
-            position: absolute;
-            left: 79px;
-            top: 377px;
-            width: 365px;
+            width: 100%;
         }
         .custom-input {
             background: white;
             border: 1px solid #000;
-            border-radius: 12px;
-            height: 60px;
+            border-radius: 10px;
+            height: 42px;
             width: 100%;
-            padding: 0 19px;
+            padding: 0 14px;
             font-family: 'Poppins', sans-serif;
             font-weight: 300;
-            font-size: 15px;
+            font-size: 13px;
             color: #8f8f8f;
-            margin-bottom: 35px;
+            margin-bottom: 20px;
         }
         .custom-input:focus {
             outline: none;
@@ -93,10 +98,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
             font-family: 'Poppins', sans-serif;
             font-weight: 300;
-            font-size: 12px;
+            font-size: 10px;
         }
         .remember-left {
             display: flex;
@@ -104,11 +109,11 @@
             color: #595959;
         }
         .remember-checkbox {
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             border: 0.5px solid #636060;
             border-radius: 2px;
-            margin-right: 8px;
+            margin-right: 6px;
         }
         .forgot-password {
             color: #000;
@@ -119,14 +124,14 @@
         .login-btn {
             background: #f09d58;
             border: none;
-            border-radius: 12px;
-            height: 55px;
+            border-radius: 10px;
+            height: 42px;
             width: 100%;
             color: white;
             font-family: 'Poppins', sans-serif;
             font-weight: 500;
-            font-size: 22px;
-            margin-bottom: 20px;
+            font-size: 16px;
+            margin-bottom: 15px;
             cursor: pointer;
         }
         .login-btn:hover {
@@ -136,7 +141,7 @@
             text-align: center;
             font-family: 'Poppins', sans-serif;
             font-weight: 300;
-            font-size: 12px;
+            font-size: 10px;
             color: #000;
         }
         .register-link a {
@@ -146,44 +151,125 @@
         }
         .right-title {
             font-family: 'Felipa', cursive;
-            font-size: 95px;
+            font-size: 65px;
             color: white;
             line-height: 1.1;
-            margin-bottom: 40px;
-            max-width: 910px;
+            margin-bottom: 30px;
+            max-width: 700px;
         }
         .right-description {
             font-family: 'Poppins', sans-serif;
             font-weight: 400;
-            font-size: 16px;
+            font-size: 14px;
             color: white;
             line-height: 1.6;
             text-align: justify;
-            max-width: 640px;
+            max-width: 520px;
         }
         
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        /* Mobile Responsive Styles */
+        @media (max-width: 800px) {
+            body {
+                overflow: auto;
+            }
+            
             .login-container {
                 flex-direction: column;
+                height: 100vh;
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1689997122000-c94449288dd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnb3VybWV0JTIwZm9vZCUyMHJlc3RhdXJhbnQlMjBkaXNofGVufDF8fHx8MTc1NTY4NzYzNnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
             }
+            
             .left-panel {
+                background: transparent;
                 width: 100%;
                 height: 100vh;
+                padding: 40px 38px;
+                position: relative;
+                justify-content: flex-start;
+                padding-top: 100px;
             }
+            
             .right-panel {
                 display: none;
             }
-            .form-container {
-                position: relative;
-                left: auto;
-                top: auto;
-                width: 90%;
-                margin: 0 auto;
+            
+            .left-content {
+                max-width: 300px;
+                width: 100%;
             }
+            
             .brand-title {
-                margin-top: 50px;
-                font-size: 48px;
+                font-size: 40px;
+                color: white;
+                margin-bottom: 50px;
+                margin-top: 30px;
+            }
+            
+            .welcome-text {
+                font-size: 20px;
+                color: white;
+                margin-bottom: 60px;
+            }
+            
+            .custom-input {
+                height: 60px;
+                font-size: 15px;
+                margin-bottom: 25px;
+                border-radius: 12px;
+                padding: 0 19px;
+            }
+            
+            .remember-section {
+                font-size: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .remember-left {
+                color: white;
+            }
+            
+            .remember-checkbox {
+                width: 15px;
+                height: 15px;
+                border: 0.5px solid #636060;
+                background: white;
+            }
+            
+            .forgot-password {
+                color: white;
+            }
+            
+            .login-btn {
+                height: 55px;
+                font-size: 22px;
+                border-radius: 12px;
+                margin-bottom: 0;
+            }
+            
+            .register-link {
+                display: none;
+            }
+        }
+
+        @media (max-width: 475px) {
+            .left-panel {
+                padding: 40px 20px;
+                padding-top: 80px;
+            }
+            
+            .left-content {
+                max-width: 280px;
+            }
+            
+            .brand-title {
+                font-size: 36px;
+            }
+            
+            .welcome-text {
+                font-size: 18px;
             }
         }
     </style>
@@ -192,12 +278,11 @@
     <div class="login-container">
         <!-- Left Panel -->
         <div class="left-panel">
-            <div class="text-center">
+            <div class="left-content">
                 <h1 class="brand-title">TastyBites</h1>
                 <p class="welcome-text">Welcome!</p>
-            </div>
-            
-            <div class="form-container">
+                
+                <div class="form-container">
                 <form id="loginForm">
                     <input 
                         type="text" 
@@ -228,6 +313,7 @@
                         New Here? <a href="#">Register</a>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
 
@@ -260,8 +346,8 @@
             const password = document.getElementById('password').value;
             
             if (username && password) {
-                alert('Login functionality would be implemented here!');
-                // Here you would typically send the data to your backend
+                window.location.href = "index.html";
+               
             } else {
                 alert('Please fill in all fields');
             }
@@ -270,13 +356,14 @@
         // Forgot password handler
         document.querySelector('.forgot-password').addEventListener('click', function(e) {
             e.preventDefault();
-            alert('Forgot password functionality would be implemented here!');
+            window.location.href = "forgot.html";
+            
         });
         
         // Register link handler
         document.querySelector('.register-link a').addEventListener('click', function(e) {
             e.preventDefault();
-            alert('Registration page would be opened here!');
+            window.location.href = "register.html";
         });
     </script>
 </body>

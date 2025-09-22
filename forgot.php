@@ -1,3 +1,59 @@
+<?php
+session_start();
+include 'config.php';
+
+$message = "";
+$error = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = trim($_POST['emailaddress'] ?? '');
+
+    if (empty($emailaddress)) {
+        $error = "Please enter your email address.";
+    } elseif (!filter_var($emailaddress, FILTER_VALIDATE_EMAIL)) {
+        $error = "Please enter a valid email address";
+    } else {
+        $stmt = $conn->prepare("SELECT id, username FROM users WHERE emailaddress = ?");
+        $stmt->bind_param("s", $emailaddress);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+
+            $token = bin2hex(random_bytes(50));
+
+            $expires = date("Y-m-d H:i:s", strtotime("+1 hour"));
+
+            $stmtUpdate = $conn->prepare("UPDATE users SET reset_token = ?, reset_expires = ?  WHERE id = ?");
+            $stmtUpdate->bind_param("ssi", $token, $expires, $user['id']);
+            $stmtUpdate->execute();
+            $stmtUpdate->close();
+
+            $resetLink = "http://" . $_SERVER['HTTP_POST'] . dirname($_SERVER['PHP_SELF']) . "/reset.php?token=" . $token;
+            $subject = "TastyBytes Password Reset";
+            $body = "Hi " . htmlspecialchars($user['username']) . ",\n\n";
+            $body .= "Click the link below to reset your password:\n";
+            $body .= $resetLink . "\n\n";
+            $body .= "This link will expire in 1 hour.";
+
+            if (mail($emailaddress, $subject, $body)) {
+                $message = "A password reset link has been sent to " . htmlspecialchars($emailaddress);
+            } else {
+                $error = "Failed to send the email. Please try again later.";
+            }
+
+        } else {
+            $error = "No account found with that email address.";
+        }
+
+        $stmt->close();
+    }
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +92,7 @@
         }
         .right-panel {
             flex: 1;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/background.png');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('assets/images/background.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -125,8 +181,8 @@
                         required
                     />
                     <div style="display: flex; gap: 20px;">
-                      <button type="button" onclick="window.location.href='login.html'" 
-                        style="Background: #f09d58; border: none; margin-left: 20px; border-radius: 12px; height: 60px; width: 100%; color: white; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 22px; margin-bottom: 20px; cursor: pointer;">
+                      <button type="button" onclick="window.location.href='login.php'" 
+                        style="Background: #454545ff; border: none; margin-left: 20px; border-radius: 12px; height: 60px; width: 100%; color: white; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 22px; margin-bottom: 20px; cursor: pointer;">
                         Back
                       </button>
 
@@ -157,18 +213,14 @@
     
     <script>
     document.getElementById('forgotForm').addEventListener('submit', function(e) {
-
         e.preventDefault();
-
         const email = document.getElementById('email').value;
-        
         if (email) {
             alert(`A password reset link has been sent to ${email}`);
         } else {
             alert('Please enter your email to reset password');
         }
     });
-</script>
-
+    </script>
 </body>
 </html>

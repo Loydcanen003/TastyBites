@@ -1,10 +1,21 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+?>
+
 <!DOCTYPE html>
 <html lang="en" style="scroll-behavior: smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/assets/style.css" />
-    <link rel="stylesheet" href="/assets/media.css" />
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/media.css">
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
@@ -28,12 +39,12 @@
       <h1>Tasty Bites</h1>
       <div class="d-flex d-sm-none flex-row align-items-center gap-3">
         <img
-          src="/assets/icons/search-alt-svgrepo-com.svg"
+          src="assets/icons/search-alt-svgrepo-com.svg"
           alt="Search Icon"
           class="search"
         />
         <img
-          src="/assets/icons/hamburger-menu-svgrepo-com.svg"
+          src="assets/icons/hamburger-menu-svgrepo-com.svg"
           alt="Hamburger icon"
           class="hamburger"
         />
@@ -48,22 +59,22 @@
           <div class="search-div px-2">
             <input type="text" name="search" id="search-bar" />
             <img
-              src="/assets/icons/search-alt-svgrepo-com.svg"
+              src="assets/icons/search-alt-svgrepo-com.svg"
               alt="Search icons"
               class="search"
             />
           </div>
         </div>
         <div class="flex-row d-flex align-items-center div-tabs gap-5">
-          <a href="/index.html" class="tabs">Home</a>
-          <a href="/login.html" class="tabs">Login</a>
-          <a href="register.html" class="tabs">Register</a>
+          <a href="dashboard.php" class="tabs">Home</a>
+          <a href="#" class="tabs">My Recipe</a>
+          <a href="#" class="tabs">Add Recipe</a>
         </div>
       </div>
 
       <div class="px-5">
-        <h1 class="tabs">Hello, User100111</h1>
-      </div>
+        <h1 class="tabs">Hello, <?php echo htmlspecialchars($username, ENT_QUOTES); ?></h1>      
+    </div>
     </nav>
 
     <div class="homer" id="home">
@@ -109,21 +120,21 @@
           <div class="carousel-inner mt-4 rounded-4">
             <div class="carousel-item active">
               <img
-                src="/assets/images/hero.png"
+                src="assets/images/hero.png"
                 class="d-block w-100"
                 alt="Carousel One"
               />
             </div>
             <div class="carousel-item">
               <img
-                src="/assets/images/hero-2.jpg"
+                src="assets/images/hero-2.jpg"
                 class="d-block w-100"
                 alt="Carousel Two"
               />
             </div>
             <div class="carousel-item">
               <img
-                src="/assets/images/hero-3.jpg"
+                src="assets/images/hero-3.jpg"
                 class="d-block w-100"
                 alt="Carousel Three"
               />
@@ -156,7 +167,7 @@
         <div class="d-flex flex-column recipe-card">
           <img
             class="recipe-item"
-            src="/assets/images/recipe-1.png"
+            src="assets/images/recipe-1.png"
             alt="Sushi"
           />
           <h1 style="font-family: 'Poppins'" class="fs-3">Recipe 1</h1>
@@ -168,7 +179,7 @@
         <div class="d-flex flex-column recipe-card">
           <img
             class="recipe-item"
-            src="/assets/images/recipe-2.png"
+            src="assets/images/recipe-2.png"
             alt="Sushi"
           />
           <h1 style="font-family: 'Poppins'" class="fs-3">Recipe 2</h1>
@@ -180,7 +191,7 @@
         <div class="d-flex flex-column recipe-card">
           <img
             class="recipe-item"
-            src="/assets/images/recipe-3.png"
+            src="assets/images/recipe-3.png"
             alt="Sushi"
           />
           <h1 style="font-family: 'Poppins'" class="fs-3">Recipe 3</h1>
@@ -193,7 +204,7 @@
         <div class="d-flex flex-column recipe-card">
           <img
             class="recipe-item"
-            src="/assets/images/recipe-4.png"
+            src="assets/images/recipe-4.png"
             alt="Sushi"
           />
           <h1 style="font-family: 'Poppins'" class="fs-3">Recipe 4</h1>
@@ -240,10 +251,9 @@
 
         recipeCards.forEach((card) => {
           card.addEventListener("click", function () {
-            // Add the animation class
+            
             this.classList.add("click-animation");
 
-            // Remove the class after animation completes
             setTimeout(() => {
               this.classList.remove("click-animation");
             }, 600);

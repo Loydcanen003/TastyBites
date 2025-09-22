@@ -1,25 +1,62 @@
+<?php
+
+session_start();
+include 'config.php';
+
+$error = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $remember = isset($_POST['remember']);
+
+    if (empty($username) || empty($password)) {
+        $error = "Please enter username and password.";
+    } else {
+        $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+        $stmt->bind_param("s" , $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['user_id'] = $user['id'];
+
+                if ($remember) {
+                    setcookie('username', $user['username'], time() + (86400 * 30), "/"); // 30 days
+                }
+
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                $error = "Invalid username or password.";
+            }
+        } else {
+            $error = "Invalid username or password.";
+        }
+
+        $stmt->close();
+    }  
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TastyBites - Login</title>
-    
     <!-- Bootstrap 5 CSS -->
-    <link 
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-        rel="stylesheet" 
-        integrity="sha384-9ndCyUa0Dke3vQOiAfNjqxdcfHOm7lggJMAqQklHlKQEOOZpD6c6UJ0T1zOokmBt" 
-        crossorigin="anonymous"
-    />
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <!-- Google Fonts -->
-    <link 
-        href="https://fonts.googleapis.com/css2?family=Felipa:wght@400&family=Poppins:wght@300;400;500;600&display=swap" 
-        rel="stylesheet"
-    />
-    
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Felipa:wght@400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+     <style>
         body {
             margin: 0;
             padding: 0;
@@ -283,34 +320,41 @@
                 <p class="welcome-text">Welcome!</p>
                 
                 <div class="form-container">
-                <form id="loginForm">
+                <form id="loginForm" method="POST" action="">
                     <input 
                         type="text" 
                         class="custom-input" 
                         placeholder="Username"
                         id="username"
+                        name="username"
                         required
+                        value="<?php echo htmlspecialchars($_POST['username'] ?? '', ENT_QUOTES); ?>"
                     />
                     <input 
                         type="password" 
                         class="custom-input" 
                         placeholder="Password"
                         id="password"
+                        name="password"
                         required
                     />
                     
                     <div class="remember-section">
                         <div class="remember-left">
-                            <input type="checkbox" class="remember-checkbox" id="remember" />
+                            <input type="checkbox" class="remember-checkbox" id="remember" name="remember" <?php if(isset($_POST['remember'])) echo 'checked'; ?> />
                             <label for="remember">Remember me</label>
                         </div>
-                        <a href="forgot.html" class="forgot-password">Forgot Password?</a>
+                        <a href="forgot.php" class="forgot-password">Forgot Password?</a>
                     </div>
+
+                    <?php if($error): ?>
+                        <div class="text-danger mb-2"><?php echo $error; ?></div>
+                    <?php endif; ?>
                     
                     <button type="submit" class="login-btn">Login</button>
                     
                     <div class="register-link">
-                        New Here? <a href="#">Register</a>
+                        New Here? <a href="register.php">Register</a>
                     </div>
                 </form>
                 </div>
@@ -330,41 +374,6 @@
     </div>
 
     <!-- Bootstrap 5 JS -->
-    <script 
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-GeOa4bHjk+qjV5QVlTHvYMhqQNbdHO19HKm0pGXZOr7mGOqcfh5UhMx4K8mvQHPq" 
-        crossorigin="anonymous">
-    </script>
-    
-    <!-- Custom JavaScript -->
-    <script>
-        // Form submission handler
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (username && password) {
-                window.location.href = "index.html";
-               
-            } else {
-                alert('Please fill in all fields');
-            }
-        });
-        
-        // Forgot password handler
-        document.querySelector('.forgot-password').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = "forgot.html";
-            
-        });
-        
-        // Register link handler
-        document.querySelector('.register-link a').addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = "register.html";
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

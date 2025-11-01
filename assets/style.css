@@ -150,13 +150,13 @@ input {
   padding: 12px;
 }
 
-.uploaded-inside-items > h1,
-.uploaded-inside-items > p {
+.uploaded-inside-items>h1,
+.uploaded-inside-items>p {
   font-family: "Poppins";
   color: white;
 }
 
-.uploaded-inside-items > h1 {
+.uploaded-inside-items>h1 {
   font-size: xx-large;
 }
 
@@ -172,9 +172,11 @@ input {
 .uploaded-items-1 {
   background-image: url("images/uploaded-1.png");
 }
+
 .uploaded-items-2 {
   background-image: url("images/uploaded-2.png");
 }
+
 .uploaded-items-3 {
   background-image: url("images/recipe-3.png");
 }
